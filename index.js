@@ -19,7 +19,7 @@ const { default: axios } = require("axios");
 
 const app = express();
 app.use(cors({
-    origin:["http://localhost:3000","https://treda1-frontend.onrender.com/"],
+    origin:"https://treda-frontend-cg25.onrender.com",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"]
 }));
