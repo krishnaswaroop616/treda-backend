@@ -20,7 +20,8 @@ const { default: axios } = require("axios");
 const app = express();
 app.use(cors({
     origin:["http://localhost:3000","https://treda1-frontend.onrender.com/"],
-    credentials: true
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"]
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -68,7 +69,12 @@ app.post("/login", async (req, res) => {
         }
 
         const token = jwt.sign({ userId: User._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax" });
+         const cookieOptions = {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === "production", 
+              sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
+        };
+        res.cookie("token", token, cookieOptions);
         res.status(200).json({ message: "Login successful", user: { username: User.username, email: User.email } });
     }
     catch (err) {
